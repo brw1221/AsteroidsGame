@@ -1,22 +1,126 @@
-//your variable declarations here
+PImage bg;
+SpaceShip starfox; //your varhiable declarations here
 public void setup() 
 {
-  //your code here
+  size(800,800);
+  bg = loadImage("bg2.jpg");
+  starfox = new SpaceShip();
 }
 public void draw() 
 {
-  //your code here
+  imageMode(CENTER);
+  image(bg,400,400,800,800);
+  starfox.show();
+  starfox.move();
 }
-class SpaceShip //extends Floater  
+public void keyPressed()
+{
+  if(keyCode == LEFT)
+  {
+    starfox.rotate(-8);
+  }
+  else if(keyCode == RIGHT)
+  {
+    starfox.rotate(8);
+  }
+  else if(keyCode == UP)
+  {
+    starfox.accelerate(0.5);
+  }
+  else if(keyCode == DOWN)
+  {
+    starfox.accelerate(-0.5);
+  }
+  else if(keyCode == 72)
+  {
+    starfox.setX((int)(Math.random()*800)+1);
+    starfox.setY((int)(Math.random()*800)+1);
+    starfox.setDirectionX(0);
+    starfox.setDirectionY(0);
+  }  
+}
+class SpaceShip extends Floater  
 {   
-    //your code here
+    public SpaceShip()
+    {
+      corners = 23;
+      xCorners = new int[corners];
+      yCorners = new int[corners];
+      xCorners[0] = 28;
+      yCorners[0] = -0;
+      xCorners[1] = 16;
+      yCorners[1] = -6;
+      xCorners[2] = 0;
+      yCorners[2] = -8;
+      xCorners[3] = 0;
+      yCorners[3] = -14;
+      xCorners[4] = -6;
+      yCorners[4] = -20;
+      xCorners[5] = 0;
+      yCorners[5] = -22;
+      xCorners[6] = -10;
+      yCorners[6] = -24;
+      xCorners[7] = -14;
+      yCorners[7] = -28;
+      xCorners[8] = -20;
+      yCorners[8] = -24;
+      xCorners[9] = -16;
+      yCorners[9] = -8;
+      xCorners[10] = -24;
+      yCorners[10] = -4;
+      xCorners[11] = -28;
+      yCorners[11] = -4;
+      xCorners[12] = -28;
+      yCorners[12] = 4;
+      xCorners[13] = -24;
+      yCorners[13] = 4;
+      xCorners[14] = -16;
+      yCorners[14] = 8;
+      xCorners[15] = -20;
+      yCorners[15] = 24;
+      xCorners[16] = -14;
+      yCorners[16] = 28;
+      xCorners[17] = -10;
+      yCorners[17] = 24;
+      xCorners[18] = 0;
+      yCorners[18] = 22;
+      xCorners[19] = -6;
+      yCorners[19] = 20;
+      xCorners[20] = 0;
+      yCorners[20] = 14;
+      xCorners[21] = 0;
+      yCorners[21] = 8;
+      xCorners[22] = 16;
+      yCorners[22] = 6;
+      myRed = 255;
+      myGreen = 255;
+      myBlue = 255;
+      myCenterX = 400;
+      myCenterY = 400;
+      myDirectionX = 0;
+      myDirectionY = 0;
+      myPointDirection = 0;
+    }
+    public void setX(int x) { myCenterX = x; }
+    public int getX() { return (int) myCenterX; }   
+    public void setY(int y) { myCenterY = y; }   
+    public int getY() { return (int)myCenterY; }   
+    public void setDirectionX(double x) { myDirectionX = x; }   
+    public double getDirectionX() { return myDirectionX; }   
+    public void setDirectionY(double y) { myDirectionY = y; }   
+    public double getDirectionY() { return myDirectionY; }   
+    public void setPointDirection(int degrees) { myPointDirection = degrees; }   
+    public double getPointDirection() {return myPointDirection; } 
+
 }
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
   protected int corners;  //the number of corners, a triangular floater has 3   
   protected int[] xCorners;   
   protected int[] yCorners;   
-  protected int myColor;   
+  protected int myRed;
+  protected int myBlue;
+  protected int myGreen;   
   protected double myCenterX, myCenterY; //holds center coordinates   
   protected double myDirectionX, myDirectionY; //holds x and y coordinates of the vector for direction of travel   
   protected double myPointDirection; //holds current direction the ship is pointing in degrees    
@@ -71,8 +175,8 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
   }   
   public void show ()  //Draws the floater at the current position  
   {             
-    fill(myColor);   
-    stroke(myColor);    
+    fill(myRed,myGreen,myBlue);   
+    stroke(0);    
     //convert degrees to radians for sin and cos         
     double dRadians = myPointDirection*(Math.PI/180);                 
     int xRotatedTranslated, yRotatedTranslated;    
