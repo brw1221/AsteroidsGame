@@ -37,6 +37,7 @@ public void keyPressed()
     starfox.setY((int)(Math.random()*800)+1);
     starfox.setDirectionX(0);
     starfox.setDirectionY(0);
+    starfox.setPointDirection((int)(Math.random()*360));
   }  
 }
 class SpaceShip extends Floater  
@@ -112,6 +113,70 @@ class SpaceShip extends Floater
     public void setPointDirection(int degrees) { myPointDirection = degrees; }   
     public double getPointDirection() {return myPointDirection; } 
 
+}
+class Asteroids extends Floater
+{
+  private int myRotation;
+  public Asteroids()
+  {
+    corners = 6;
+    xCorners = new int[corners];
+    yCorners = new int[corners];
+    xCorners[0] = 
+    yCorners[0] =
+    xCorners[1] =
+    yCorners[1] =
+    xCorners[2] =
+    yCorners[2] =
+    xCorners[3] =
+    yCorners[3] =
+    xCorners[4] =
+    yCorners[4] =
+    xCorners[5] =
+    yCorners[5] =
+    myRed = 255;
+    myGreen = 255;
+    myBlue = 255;
+    myCenterX = 400;
+    myCenterY = 400;
+    myDirectionX = 0;
+    myDirectionY = 0;
+    myPointDirection = 0;
+    if(Math.random()>0.5){myRotation = 1;}
+    else{myRotation = -1;}
+  }
+    public void setX(int x) { myCenterX = x; }
+    public int getX() { return (int) myCenterX; }   
+    public void setY(int y) { myCenterY = y; }   
+    public int getY() { return (int)myCenterY; }   
+    public void setDirectionX(double x) { myDirectionX = x; }   
+    public double getDirectionX() { return myDirectionX; }   
+    public void setDirectionY(double y) { myDirectionY = y; }   
+    public double getDirectionY() { return myDirectionY; }   
+    public void setPointDirection(int degrees) { myPointDirection = degrees; }   
+    public double getPointDirection() {return myPointDirection; } 
+    public void move()
+    {
+      myCenterX += myDirectionX;    
+      myCenterY += myDirectionY;   
+      myPointDirection += myRotation;   
+      if(myCenterX >width)
+      {     
+        myCenterX = 0;    
+      }    
+      else if (myCenterX<0)
+      {     
+        myCenterX = width;    
+      }    
+      if(myCenterY >height)
+      {    
+        myCenterY = 0;    
+      }   
+     else if (myCenterY < 0)
+     {     
+       myCenterY = height;    
+     }   
+    }
 }
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
