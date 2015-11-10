@@ -1,10 +1,20 @@
 PImage bg;
-SpaceShip starfox; //your varhiable declarations here
+Asteroids[] ceres;
+SpaceShip starfox; 
+boolean u = false;
+boolean d = false;
+boolean l = false;
+boolean r = false;
 public void setup() 
 {
   size(800,800);
   bg = loadImage("bg2.jpg");
   starfox = new SpaceShip();
+  ceres = new Asteroids[20];
+    for(int i=0; i<ceres.length; i++)
+  {
+      ceres[i]=new Asteroids();
+  }
 }
 public void draw() 
 {
@@ -12,26 +22,47 @@ public void draw()
   image(bg,400,400,800,800);
   starfox.show();
   starfox.move();
+  for(int i=0; i<ceres.length; i++)
+  {
+       ceres[i].move();
+       ceres[i].show();
+  }
+  if(l == true)
+  {
+    starfox.rotate(-8);
+  }
+  if(r == true)
+  {
+    starfox.rotate(8);
+  }
+  if(u == true)
+  {
+    starfox.accelerate(0.5);
+  }
+  if(d == true)
+  {
+    starfox.accelerate(-0.5);
+  }
 }
 public void keyPressed()
 {
   if(keyCode == LEFT)
   {
-    starfox.rotate(-8);
+    l = true;
   }
-  else if(keyCode == RIGHT)
+  if(keyCode == RIGHT)
   {
-    starfox.rotate(8);
+    r = true;
   }
-  else if(keyCode == UP)
+  if(keyCode == UP)
   {
-    starfox.accelerate(0.5);
+    u = true;
   }
-  else if(keyCode == DOWN)
+  if(keyCode == DOWN)
   {
-    starfox.accelerate(-0.5);
+    d = true;
   }
-  else if(keyCode == 72)
+  if(keyCode == 72)
   {
     starfox.setX((int)(Math.random()*800)+1);
     starfox.setY((int)(Math.random()*800)+1);
@@ -39,6 +70,25 @@ public void keyPressed()
     starfox.setDirectionY(0);
     starfox.setPointDirection((int)(Math.random()*360));
   }  
+}
+public void keyReleased()
+{
+   if(keyCode == LEFT)
+  {
+    l = false;
+  }
+  else if(keyCode == RIGHT)
+  {
+    r = false;
+  }
+  else if(keyCode == UP)
+  {
+    u = false;
+  }
+  else if(keyCode == DOWN)
+  {
+    d = false;
+  }
 }
 class SpaceShip extends Floater  
 {   
@@ -116,34 +166,35 @@ class SpaceShip extends Floater
 }
 class Asteroids extends Floater
 {
-  private int myRotation;
+  private int myRotation,rand;
   public Asteroids()
   {
     corners = 6;
+    rand = (int)(Math.random()*5)+3;
     xCorners = new int[corners];
     yCorners = new int[corners];
-    xCorners[0] = 
-    yCorners[0] =
-    xCorners[1] =
-    yCorners[1] =
-    xCorners[2] =
-    yCorners[2] =
-    xCorners[3] =
-    yCorners[3] =
-    xCorners[4] =
-    yCorners[4] =
-    xCorners[5] =
-    yCorners[5] =
+     xCorners[0]=(int)(Math.random()*6*rand)+6*rand;
+      xCorners[1]=(int)(Math.random()*4*rand);
+      xCorners[2]=-(int)(Math.random()*4*rand);
+      xCorners[3]=(int)(Math.random()*6*rand)-6*rand;
+      xCorners[4]=-(int)(Math.random()*4*rand);
+      xCorners[5]=(int)(Math.random()*4*rand);
+      yCorners[0]=(int)(Math.random()*4*rand)-3*rand;
+      yCorners[1]=(int)(Math.random()*4*rand)-6*rand;
+      yCorners[2]=(int)(Math.random()*4*rand)-6*rand;
+      yCorners[3]=(int)(Math.random()*4*rand)-3*rand;
+      yCorners[4]=(int)(Math.random()*4*rand)+6*rand;
+      yCorners[5]=(int)(Math.random()*4*rand)+6*rand; 
     myRed = 255;
     myGreen = 255;
     myBlue = 255;
-    myCenterX = 400;
-    myCenterY = 400;
-    myDirectionX = 0;
-    myDirectionY = 0;
+    myCenterX = (int)(Math.random()*800);
+    myCenterY = (int)(Math.random()*800);
+    myDirectionX = Math.cos(Math.random()*2*Math.PI);
+    myDirectionY = Math.sin(Math.random()*2*Math.PI);
     myPointDirection = 0;
-    if(Math.random()>0.5){myRotation = 1;}
-    else{myRotation = -1;}
+    if(Math.random()>0.5){myRotation = ((int)(Math.random()*2)+2)*(-1);}
+    else{myRotation = ((int)(Math.random()*2)+2);}
   }
     public void setX(int x) { myCenterX = x; }
     public int getX() { return (int) myCenterX; }   
@@ -158,7 +209,7 @@ class Asteroids extends Floater
     public void move()
     {
       myCenterX += myDirectionX;    
-      myCenterY += myDirectionY;   
+      myCenterY += myDirectionY;
       myPointDirection += myRotation;   
       if(myCenterX >width)
       {     
@@ -177,6 +228,24 @@ class Asteroids extends Floater
        myCenterY = height;    
      }   
     }
+    public void show()
+    {           
+    fill(160,82,45);   
+    stroke(0);    
+    //convert degrees to radians for sin and cos         
+    double dRadians = myPointDirection*(Math.PI/180);                 
+    int xRotatedTranslated, yRotatedTranslated;    
+    beginShape();         
+    for(int nI = 0; nI < corners; nI++)    
+    {     
+      //rotate and translate the coordinates of the floater using current direction 
+      xRotatedTranslated = (int)((xCorners[nI]* Math.cos(dRadians)) - (yCorners[nI] * Math.sin(dRadians))+myCenterX);     
+      yRotatedTranslated = (int)((xCorners[nI]* Math.sin(dRadians)) + (yCorners[nI] * Math.cos(dRadians))+myCenterY);      
+      vertex(xRotatedTranslated,yRotatedTranslated);    
+    }   
+    endShape(CLOSE);  
+  }   
+    
 }
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
