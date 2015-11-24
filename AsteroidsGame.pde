@@ -1,20 +1,23 @@
 PImage bg;
-Asteroids[] ceres;
+ArrayList <Asteroids> ceres;
 SpaceShip starfox; 
 boolean u = false;
 boolean d = false;
 boolean l = false;
 boolean r = false;
+int cNum;
 public void setup() 
 {
+  cNum = 20;
   size(800,800);
   bg = loadImage("bg2.jpg");
   starfox = new SpaceShip();
-  ceres = new Asteroids[20];
-    for(int i=0; i<ceres.length; i++)
+  ceres = new ArrayList <Asteroids>();
+    for(int i=0; i<cNum; i++)
   {
-      ceres[i]=new Asteroids();
+      ceres.add(new Asteroids());
   }
+  
 }
 public void draw() 
 {
@@ -22,10 +25,17 @@ public void draw()
   image(bg,400,400,800,800);
   starfox.show();
   starfox.move();
-  for(int i=0; i<ceres.length; i++)
+  for(int i=0; i<ceres.size(); i++)
   {
-       ceres[i].move();
-       ceres[i].show();
+       ceres.get(i).move();
+       ceres.get(i).show();
+  }
+  for(int i=0; i<ceres.size(); i++)
+  {
+    if(dist(ceres.get(i).getX(),ceres.get(i).getY(),starfox.getX(),starfox.getY())<20)
+    {
+      ceres.remove(i);
+    }
   }
   if(l == true)
   {
