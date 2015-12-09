@@ -1,14 +1,17 @@
 PImage bg;
 ArrayList <Asteroids> ceres;
 SpaceShip starfox; 
+ArrayList <Bullets> one = new ArrayList<Bullets>();
 boolean u = false;
 boolean d = false;
 boolean l = false;
 boolean r = false;
 int cNum;
+int oNum;
 public void setup() 
 {
   cNum = 20;
+  oNum = 2;
   size(800,800);
   bg = loadImage("bg2.jpg");
   starfox = new SpaceShip();
@@ -21,10 +24,16 @@ public void setup()
 }
 public void draw() 
 {
-  imageMode(CENTER);
-  image(bg,400,400,800,800);
+  background(bg);
   starfox.show();
   starfox.move();
+  
+  for(int i=0; i<one.size();i++)
+  {
+      one.get(i).move();
+      one.get(i).show();
+  }
+
   for(int i=0; i<ceres.size(); i++)
   {
        ceres.get(i).move();
@@ -32,11 +41,13 @@ public void draw()
   }
   for(int i=0; i<ceres.size(); i++)
   {
-    if(dist(ceres.get(i).getX(),ceres.get(i).getY(),starfox.getX(),starfox.getY())<20)
+    if(dist(ceres.get(i).getX(),ceres.get(i).getY(),starfox.getX(),starfox.getY())<30)
     {
       ceres.remove(i);
+      ceres.add(new Asteroids());
     }
   }
+
   if(l == true)
   {
     starfox.rotate(-8);
@@ -79,7 +90,24 @@ public void keyPressed()
     starfox.setDirectionX(0);
     starfox.setDirectionY(0);
     starfox.setPointDirection((int)(Math.random()*360));
-  }  
+  } 
+  if (keyCode == 83)
+  {
+    one.add(new Bullets(starfox));
+  } 
+  for(int x=0; x<one.size(); x++)
+  {
+    for(int i=0; i<ceres.size(); i++)
+
+  {
+    if(dist(ceres.get(i).getX(), ceres.get(i).getY(), one.get(x).getX(), one.get(x).getY())<30)
+    {
+      ceres.remove(i);
+      ceres.add(new Asteroids());
+      one.remove(x);
+      break;
+    }  }
+  }
 }
 public void keyReleased()
 {
@@ -256,6 +284,42 @@ class Asteroids extends Floater
     endShape(CLOSE);  
   }   
     
+}
+class Bullets extends Floater
+{
+  
+  public Bullets(SpaceShip x)
+  {
+    myCenterX = x.getX();
+    myCenterY = x.getY();
+    myPointDirection = x.getPointDirection();
+    double dRadians =myPointDirection*(Math.PI/180); 
+    myDirectionX = 5 * Math.cos(dRadians) + x.getDirectionX();
+    myDirectionY = 5 * Math.sin(dRadians) + x.getDirectionY();
+    
+  }
+   public void setX(int x) { myCenterX = x; }
+    public int getX() { return (int) myCenterX; }   
+    public void setY(int y) { myCenterY = y; }   
+    public int getY() { return (int)myCenterY; }   
+    public void setDirectionX(double x) { myDirectionX = x; }   
+    public double getDirectionX() { return myDirectionX; }   
+    public void setDirectionY(double y) { myDirectionY = y; }   
+    public double getDirectionY() { return myDirectionY; }   
+    public void setPointDirection(int degrees) { myPointDirection = degrees; }   
+    public double getPointDirection() {return myPointDirection; } 
+  public void show()
+  {
+    fill(255);
+    stroke(0);
+    ellipse((float)myCenterX,(float)myCenterY,7,7);
+  }
+    public void move ()   //move the floater in the current direction of travel
+  {      
+    //change the x and y coordinates by myDirectionX and myDirectionY       
+    myCenterX += myDirectionX;    
+    myCenterY += myDirectionY;     
+    }   
 }
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
