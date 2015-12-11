@@ -1,3 +1,6 @@
+
+/* @pjs preload="bg2.jpg"; */
+/* @pjs preload="asteroid-icon.png"; */
 PImage bg;
 PImage ast;
 ArrayList <AsteroidsL> ceresL;
@@ -25,7 +28,8 @@ public void setup()
 }
 public void draw() 
 {
-  background(bg);
+  //background(bg);
+  image(bg,400,400,800,800);
   starfox.show();
   starfox.move();
 
